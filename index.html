@@ -1,7 +1,10 @@
 <!doctype html>
 <html>
 <head>
-	<script type="text/javascript" src="three.min.js"></script>
+	<script type="text/javascript" src="js/three.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="js/TrackballControls.js"></script>
+	
 	<style type="text/css">
 	html, body {padding: 0; margin: 0;}
 	</style>
@@ -13,6 +16,8 @@
     var camera, scene, renderer;
     var geometry, material, mesh;
     var ambient;
+	var controls;
+	var socket = io.connect('http://localhost');
     
     init();
     animate();
@@ -21,6 +26,9 @@
 
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
         camera.position.z = 1000;
+
+		controls = new THREE.TrackballControls( camera );
+		
 
         scene = new THREE.Scene();
 
@@ -43,6 +51,12 @@
 
         document.body.appendChild( renderer.domElement );
 
+		socket.on('news', function (data) {
+				console.log(data);
+				socket.emit('my other event', { my: 'data' });
+				});
+
+		window.addEventListener( 'resize', onWindowResize, false );
     }
 
     function animate() {
@@ -50,12 +64,22 @@
         // note: three.js includes requestAnimationFrame shim
         requestAnimationFrame( animate );
 
-        mesh.rotation.x += 0.01;
-        mesh.rotation.y += 0.02;
+//        mesh.rotation.x += 0.01;
+ //       mesh.rotation.y += 0.02;
+
+		controls.update();
 
         renderer.render( scene, camera );
 
     }
+
+	function onWindowResize() {
+		camera.aspect = window.innerWidth / window.innerHeight;
+		camera.updateProjectionMatrix();
+
+		renderer.setSize( window.innerWidth, window.innerHeight );
+		effect.setSize( window.innerWidth, window.innerHeight );
+	}	
 
 </script>
 
