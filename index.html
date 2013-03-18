@@ -18,6 +18,7 @@
     var ambient;
 	var controls;
 	var socket = io.connect('http://localhost');
+	var isDynamicResizing = false;
     
     init();
     animate();
@@ -56,6 +57,14 @@
 				socket.emit('my other event', { my: 'data' });
 				});
 
+		socket.on('resize', function(data){
+				var width = data.width;
+				var height = data.height;
+				console.log("Resizing window to " + data);
+				isDynamicResizing = true;
+				window.resizeTo(width, height);
+				});
+
 		window.addEventListener( 'resize', onWindowResize, false );
     }
 
@@ -78,7 +87,11 @@
 		camera.updateProjectionMatrix();
 
 		renderer.setSize( window.innerWidth, window.innerHeight );
-		effect.setSize( window.innerWidth, window.innerHeight );
+
+		if(!isDynamicResizing)
+			socket.emit('resize', {width: window.innerWidth, height: window.innerHeight});
+		else
+			console.log("Not resizing");
 	}	
 
 </script>

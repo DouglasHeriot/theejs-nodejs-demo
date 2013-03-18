@@ -22,6 +22,12 @@ io.sockets.on('connection', function (socket) {
   socket.on('my other event', function (data) {
     console.log(data);
   });
+
+  socket.on('resize', function(data){
+  	console.log(data);
+	socket.broadcast.emit('resize', data);
+  });
+
 });
 
 
