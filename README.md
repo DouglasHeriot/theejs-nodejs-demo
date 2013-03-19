@@ -1,15 +1,22 @@
 # Three.js Demo
 
-Run with
+To run:
 
-    $ node server.js
+1. Install Node.js
 
+	http://nodeks.org/
 
-## Prerequisits
+2. Install required packages
 
-Install nodejs, and the packages:
+	$ npm install express socket.io
 
-	$ npm install -g express socket.io
+3. Run
 
+	$ node server.js
 
+4. Open in a modern web broswer
+
+	http://localhost:9001/
+
+(May also be running at http://threejs.321.douglasheriot.com/ )
 
