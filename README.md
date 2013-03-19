@@ -4,7 +4,7 @@ To run:
 
 1. Install Node.js
 
-	http://nodeks.org/
+	http://nodejs.org/
 
 2. Install required packages
 
