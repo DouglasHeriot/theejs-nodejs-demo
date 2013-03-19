@@ -8,7 +8,7 @@ var isDynamicResizing = false;
 
 function init() {
 
-	socket = io.connect(location.origin);
+	socket = io.connect(location.protocol + '//' + location.hostname + ':8080');
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
 	camera.position.z = 1000;
 
