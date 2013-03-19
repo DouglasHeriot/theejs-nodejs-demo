@@ -28,6 +28,11 @@ io.sockets.on('connection', function (socket) {
 	socket.broadcast.emit('resize', data);
   });
 
+  socket.on('move', function(data){
+	  console.log("Moving box to x = ", data.x);
+	  socket.broadcast.emit('move', data);
+	  });
+
 });
 
 

@@ -1,101 +1,23 @@
 <!doctype html>
 <html>
 <head>
-	<script type="text/javascript" src="js/three.min.js"></script>
-	<script src="/socket.io/socket.io.js"></script>
-	<script src="js/TrackballControls.js"></script>
+	<meta charset="UTF-8">
 	
-	<style type="text/css">
-	html, body {padding: 0; margin: 0;}
-	</style>
+	<script type="text/javascript" src="js/three.min.js"></script>
+	<script type="text/javascript" src="js/TrackballControls.js"></script>
+	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="js/blockbuilder.js"></script>
+	
+	<link rel="stylesheet" href="css/styles.css" media="all">
+
+	<title>BlockBuilder Three.js, NodeJS, and Socket.io demo</title>
 </head>
 <body>
-	
-<script>
-
-    var camera, scene, renderer;
-    var geometry, material, mesh;
-    var ambient;
-	var controls;
-	var socket = io.connect(location.origin);
-	var isDynamicResizing = false;
-    
-    init();
-    animate();
-
-    function init() {
-
-        camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-        camera.position.z = 1000;
-
-		controls = new THREE.TrackballControls( camera );
 		
-
-        scene = new THREE.Scene();
-
-        geometry = new THREE.CubeGeometry( 200, 200, 200 );
-				
-        material = new THREE.MeshLambertMaterial( { color: 0xffffff, ambient: 0x000000, shading: THREE.FlatShading } );
-
-        mesh = new THREE.Mesh( geometry, material );
-        scene.add( mesh );
-
-		hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 1.0 );
-		hemiLight.color.setHSL( 0.6, 1.0, 0.6 );
-		hemiLight.groundColor.setHSL( 0.0, 0.0, 0.75 );
-		hemiLight.position.set( -200, 500, 200 );
-		scene.add( hemiLight );
-
-
-        renderer = new THREE.WebGLRenderer();
-        renderer.setSize( window.innerWidth, window.innerHeight );
-
-        document.body.appendChild( renderer.domElement );
-
-		socket.on('news', function (data) {
-				console.log(data);
-				socket.emit('my other event', { my: 'data' });
-				});
-
-		socket.on('resize', function(data){
-				var width = data.width;
-				var height = data.height;
-				console.log("Resizing window to " + data);
-				isDynamicResizing = true;
-				window.resizeTo(width, height);
-				});
-
-		window.addEventListener( 'resize', onWindowResize, false );
-    }
-
-    function animate() {
-
-        // note: three.js includes requestAnimationFrame shim
-        requestAnimationFrame( animate );
-
-//        mesh.rotation.x += 0.01;
- //       mesh.rotation.y += 0.02;
-
-		controls.update();
-
-        renderer.render( scene, camera );
-
-    }
-
-	function onWindowResize() {
-		camera.aspect = window.innerWidth / window.innerHeight;
-		camera.updateProjectionMatrix();
-
-		renderer.setSize( window.innerWidth, window.innerHeight );
-
-		if(!isDynamicResizing)
-			socket.emit('resize', {width: window.innerWidth, height: window.innerHeight});
-		else
-			console.log("Not resizing");
-	}	
-
-</script>
-
+	<div id="controls">
+		<input type="range" min="-1000" max="1000" id="sliderX">
+	</div>
 	
 </body>
 </html>
