@@ -4,19 +4,19 @@ To run:
 
 1. Install Node.js
 
-	http://nodejs.org/
+    http://nodejs.org/
 
 2. Install required packages
 
-	$ npm install express socket.io
+    $ npm install express socket.io
 
 3. Run
 
-	$ node server.js
+    $ node server.js
 
 4. Open in a modern web broswer
 
-	http://localhost:9001/
+    http://localhost:9001/
 
 (May also be running at http://threejs.321.douglasheriot.com/ )
 
