@@ -6,7 +6,9 @@
 	<script type="text/javascript" src="js/three.min.js"></script>
 	<script type="text/javascript" src="js/TrackballControls.js"></script>
 	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
-	<script type="text/javascript" src="http://localhost:8080/socket.io/socket.io.js"></script>
+	<script type="text/javascript">
+	document.write('<script type="text/javascript" src="' + location.protocol + '//' + location.hostname + ':8080/socket.io/socket.io.js"><' + '/script>');
+	</script>
 	<script type="text/javascript" src="js/blockbuilder.js"></script>
 	
 	<link rel="stylesheet" href="css/styles.css" media="all">
