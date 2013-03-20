@@ -48,6 +48,13 @@ function init()
 	socket.on('place', function(data){
 			scene.add(newBlock(data.position, false));
 			});
+
+	socket.on('blocks', function(data){
+			for(block in data)
+			{
+				scene.add(newBlock(data[block].position, false));
+			}
+			});
 }
 
 function animate()
