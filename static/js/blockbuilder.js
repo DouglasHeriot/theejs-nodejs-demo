@@ -4,12 +4,19 @@ var geometry, material, mesh;
 var ambient;
 var controls;
 var socket;
+var cursors = {};
 
-
-function newBlock(position, wireframe)
+function newBlock(position, wireframe, color)
 {
 	geometry = new THREE.CubeGeometry(200, 200, 200);
-	material = new THREE.MeshLambertMaterial({color: 0xffffff, ambient: 0x000000, shading: THREE.FlatShading, wireframe: wireframe});
+	material = new THREE.MeshLambertMaterial(
+			{
+				color: color,
+				ambient: 0x000000,
+				shading: THREE.FlatShading,
+				wireframe: wireframe,
+				wireframeLinewidth: 2.0
+				});
 	var block = new THREE.Mesh(geometry, material);
 	block.position.x = position.x;
 	block.position.y = position.y;
@@ -25,7 +32,7 @@ function init()
 
 	scene = new THREE.Scene();
 
-	mesh = newBlock({x: 0, y: 0, z:0}, true);
+	mesh = newBlock({x: 0, y: 0, z:0}, true, 0xff0000);
 	scene.add(mesh);
 
 	hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1.0);
@@ -42,7 +49,12 @@ function init()
 	document.body.appendChild(renderer.domElement);
 
 	socket.on('move', function(data){
-			mesh.position = data.position;
+			if(cursors[data.id] == undefined)
+			{
+				cursors[data.id] = newBlock(data.position, true, 0xffffff);
+				scene.add(cursors[data.id]);
+			}
+			cursors[data.id].position = data.position;
 			});
 
 	socket.on('place', function(data){
@@ -52,7 +64,7 @@ function init()
 	socket.on('blocks', function(data){
 			for(block in data)
 			{
-				scene.add(newBlock(data[block].position, false));
+			scene.add(newBlock(data[block].position, false));
 			}
 			});
 }
