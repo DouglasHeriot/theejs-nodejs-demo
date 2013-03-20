@@ -10,7 +10,7 @@ function init() {
 
 	socket = io.connect(location.protocol + '//' + location.hostname + ':8080');
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-	camera.position.z = 1000;
+	camera.position.z = 2000;
 
 	scene = new THREE.Scene();
 
@@ -33,33 +33,18 @@ function init() {
 
 	document.body.appendChild( renderer.domElement );
 
-	socket.on('resize', function(data){
-			var width = data.width;
-			var height = data.height;
-			console.log("Resizing window to " + data);
-			isDynamicResizing = true;
-			window.resizeTo(width, height);
-			});
-
 	socket.on('move', function(data){
-			mesh.position.x = data.x;
+			mesh.position = data.position;
 			});
 
 	window.addEventListener( 'resize', onWindowResize, false );
 }
 
 function animate() {
-
-	// note: three.js includes requestAnimationFrame shim
 	requestAnimationFrame( animate );
 
-	//        mesh.rotation.x += 0.01;
-	//       mesh.rotation.y += 0.02;
-
 	controls.update();
-
 	renderer.render( scene, camera );
-
 }
 
 function onWindowResize() {
@@ -72,11 +57,16 @@ function onWindowResize() {
 
 $(function(){
 		$('#sliderX').change(function(){
-			var value = this.valueAsNumber;
-			console.log('Moved slider: ' + value);
-			mesh.position.x = value;
-
-			socket.emit('move', {x: value});
+			mesh.position.x = this.valueAsNumber;
+			socket.emit('move', {position: mesh.position});
+			});
+		$('#sliderY').change(function(){
+			mesh.position.y = this.valueAsNumber;
+			socket.emit('move', {position: mesh.position});
+			});
+		$('#sliderZ').change(function(){
+			mesh.position.z = this.valueAsNumber;
+			socket.emit('move', {position: mesh.position});
 			});
 
 		init();

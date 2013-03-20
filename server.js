@@ -15,7 +15,6 @@ app.get('/', function (req, res) {
 
 io.sockets.on('connection', function (socket) {
   socket.on('move', function(data){
-	  console.log("Moving box to x = ", data.x);
 	  socket.broadcast.emit('move', data);
 	  });
 
