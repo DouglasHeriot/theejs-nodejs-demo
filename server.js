@@ -36,6 +36,11 @@ io.sockets.on('connection', function (socket) {
 			blocks.push(data);
 			});
 
+		socket.on('clear', function(data){
+			blocks = [];
+			socket.broadcast.emit('clear', {});
+			});
+
 		// Send current array of blocks when first connecting
 		socket.emit('blocks', blocks);
 

@@ -5,6 +5,7 @@ var ambient;
 var controls;
 var socket;
 var cursors = {};
+var blocks = [];
 
 function newBlock(position, wireframe, color)
 {
@@ -22,6 +23,14 @@ function newBlock(position, wireframe, color)
 	block.position.y = position.y;
 	block.position.z = position.z;
 	return block;
+}
+
+function clearBlocks()
+{
+	for(i in blocks)
+		scene.remove(blocks[i]);
+
+	blocks = [];
 }
 
 function init()
@@ -58,14 +67,18 @@ function init()
 			});
 
 	socket.on('place', function(data){
-			scene.add(newBlock(data.position, false));
+			var block = newBlock(data.position, false); 
+			blocks.push(block);
+			scene.add(block);
 			});
 
 	socket.on('blocks', function(data){
 			for(block in data)
-			{
-			scene.add(newBlock(data[block].position, false));
-			}
+				scene.add(newBlock(data[block].position, false));
+			});
+
+	socket.on('clear', function(data){
+			clearBlocks();
 			});
 }
 
@@ -92,8 +105,18 @@ $(function(){
 			});
 
 		$('#placeBlockButton').click(function(){
-			scene.add(newBlock(mesh.position, false));
+			var block = newBlock(mesh.position, false); 
+			blocks.push(block);
+			scene.add(block);
 			socket.emit('place', {position: mesh.position});
+			});
+
+		$('#clearBlocksButton').click(function(){
+			if(confirm("Are you sure you want to delete all the blocks?"))
+			{
+				socket.emit('clear', {});
+				clearBlocks();
+			}
 			});
 
 		$(window).resize(function(){
