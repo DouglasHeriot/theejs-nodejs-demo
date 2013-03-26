@@ -74,7 +74,11 @@ function init()
 
 	socket.on('blocks', function(data){
 			for(block in data)
-				scene.add(newBlock(data[block].position, false));
+			{
+				var theNewBlock = newBlock(data[block].position, false);
+				blocks.push(theNewBlock);
+				scene.add(theNewBlock);
+			}
 			});
 
 	socket.on('clear', function(data){
