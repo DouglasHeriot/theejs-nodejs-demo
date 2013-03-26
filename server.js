@@ -35,8 +35,13 @@ io.sockets.on('connection', function (socket) {
 			// Save block
 			blocks.push(data);
 			});
-
-		socket.on('clear', function(data){
+            
+        socket.on('blockSize', function(data){
+            data.id = socket.id;
+            socket.broadcast.emit('blockSize', data);
+            });
+		
+        socket.on('clear', function(data){
 			blocks = [];
 			socket.broadcast.emit('clear', {});
 			});

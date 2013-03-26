@@ -7,9 +7,9 @@ var socket;
 var cursors = {};
 var blocks = [];
 
-function newBlock(position, wireframe, color)
+function newBlock(position, scale, wireframe, color)
 {
-	geometry = new THREE.CubeGeometry(200, 200, 200);
+	geometry = new THREE.CubeGeometry(scale.x*100, scale.y*100, scale.z*100);
 	material = new THREE.MeshLambertMaterial(
 			{
 				color: color,
@@ -41,7 +41,8 @@ function init()
 
 	scene = new THREE.Scene();
 
-	mesh = newBlock({x: 0, y: 0, z:0}, true, 0xff0000);
+	mesh = newBlock({x: 0, y: 0, z:0}, {x: 1, y: 1, z: 1}, true, 0xff0000);
+    
 	scene.add(mesh);
 
 	hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1.0);
@@ -60,14 +61,25 @@ function init()
 	socket.on('move', function(data){
 			if(cursors[data.id] == undefined)
 			{
-				cursors[data.id] = newBlock(data.position, true, 0xffffff);
+				cursors[data.id] = newBlock(data.position, data.scale, true, 0xffffff);
 				scene.add(cursors[data.id]);
 			}
 			cursors[data.id].position = data.position;
-			});
+			cursors[data.id].scale = mesh.scale;               
+            });
+    
+    socket.on('blockSize', function(data){
+        if(cursors[data.id] == undefined)
+        {
+            cursors[data.id] = newBlock(data.position, data.scale, true, 0xffffff);
+            scene.add(cursors[data.id]);
+        }
+        cursors[data.id].position = data.position;
+        cursors[data.id].scale = data.scale;
+        });
 
 	socket.on('place', function(data){
-			var block = newBlock(data.position, false); 
+			var block = newBlock(data.position, data.scale, false); 
 			blocks.push(block);
 			scene.add(block);
 			});
@@ -75,7 +87,7 @@ function init()
 	socket.on('blocks', function(data){
 			for(block in data)
 			{
-				var theNewBlock = newBlock(data[block].position, false);
+				var theNewBlock = newBlock(data[block].position, data[block].scale, false);
 				blocks.push(theNewBlock);
 				scene.add(theNewBlock);
 			}
@@ -97,22 +109,27 @@ function animate()
 $(function(){
 		$('#sliderX').change(function(){
 			mesh.position.x = this.valueAsNumber;
-			socket.emit('move', {position: mesh.position});
+			socket.emit('move', {position: mesh.position, scale: mesh.scale});
 			});
 		$('#sliderY').change(function(){
 			mesh.position.y = this.valueAsNumber;
-			socket.emit('move', {position: mesh.position});
+			socket.emit('move', {position: mesh.position, scale: mesh.scale});
 			});
 		$('#sliderZ').change(function(){
 			mesh.position.z = this.valueAsNumber;
-			socket.emit('move', {position: mesh.position});
+			socket.emit('move', {position: mesh.position, scale: mesh.scale});
 			});
-
+		$('#sliderSize').change(function(){
+            mesh.scale.x = this.valueAsNumber;
+            mesh.scale.y = this.valueAsNumber;
+            mesh.scale.z = this.valueAsNumber;
+            socket.emit('blockSize', {position: mesh.position, scale: mesh.scale});
+			});   
 		$('#placeBlockButton').click(function(){
-			var block = newBlock(mesh.position, false); 
+			var block = newBlock(mesh.position, mesh.scale, false); 
 			blocks.push(block);
 			scene.add(block);
-			socket.emit('place', {position: mesh.position});
+			socket.emit('place', {position: mesh.position, scale: mesh.scale});
 			});
 
 		$('#clearBlocksButton').click(function(){
