@@ -96,6 +96,19 @@ function init()
 	socket.on('clear', function(data){
 			clearBlocks();
 			});
+			
+			
+	//New section for chatWindow
+	socket.on('connect', function(){
+		socket.emit('newUser', prompt("Please enter the name that you would like to identify you in the chat window"));
+	});
+	
+	socket.on('updateChat', function(username, message){
+		$('#chatWindow').append(username+":>" + " " + message +"\n");
+	});
+	
+	//End new section for chatWindow
+			
 }
 
 function animate()
@@ -140,6 +153,40 @@ $(function(){
 			}
 			});
 
+		$(window).resize(function(){
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			});
+
+		//New section for chatWindow
+		
+		//When the user clicks the send button
+		$('#send').click(function(){
+		
+			//Get the message from the text field
+			var message = $('#message').val();
+			
+			//Reset the text field to empty
+			$('#message').val('');
+			
+			//Send the server the newMessage command along with the message
+			socket.emit('newMessage', message);
+			
+			//Re-focus on the textarea
+			$('#message').focus();
+		});
+		
+		//Send the data when the user presses enter as well, more natural this way
+		$('#message').keypress(function(e) {
+			if(e.which == 13) {
+				$('#send').focus().click();
+				$(this).focus();
+			}
+		});
+		//End new section
+		
+		
 		$(window).resize(function(){
 			camera.aspect = window.innerWidth / window.innerHeight;
 			camera.updateProjectionMatrix();

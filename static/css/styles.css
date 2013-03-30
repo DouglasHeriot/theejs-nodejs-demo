@@ -6,3 +6,22 @@ html, body {padding: 0; margin: 0;}
 	left: 0;
 }
 
+#chatWindow{
+	position:absolute;
+	bottom: 25px;
+	left: 0;
+}
+
+
+#message{
+	position:absolute;
+	bottom: 0;
+	left: 0;
+}
+
+#send{
+	position:absolute;
+	bottom: 0;
+	left: 340px;
+}
+
