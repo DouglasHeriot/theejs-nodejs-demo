@@ -55,7 +55,6 @@ io.sockets.on('connection', function (socket) {
 			//Store the username in the global user's list
 			users.username = username;
 			
-			
 		});
 		socket.on('newMessage', function(message){
 			//Broadcast the message to all other users, along with the username of the originator

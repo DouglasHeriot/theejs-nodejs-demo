@@ -106,7 +106,6 @@ function init()
 	socket.on('updateChat', function(username, message){
 		$('#chatWindow').append(username+":>" + " " + message +"\n");
 	});
-	
 	//End new section for chatWindow
 			
 }
