@@ -143,6 +143,21 @@ $(function(){
 			scene.add(block);
 			socket.emit('place', {position: mesh.position, scale: mesh.scale});
 			});
+		$('#lotsOfBlocks').click(function(){
+			for(var i = 0; i < 100; i++)
+			{
+				var max = 1000;
+				mesh.position.x = Math.random() * max*2 - max/2;
+				mesh.position.y = Math.random() * max*2 - max/2;
+				mesh.position.z = Math.random() * max*2 - max/2;
+				mesh.position.scale = Math.random() * 2;
+
+				var block = newBlock(mesh.position, mesh.scale, false); 
+				blocks.push(block);
+				scene.add(block);
+				socket.emit('place', {position: mesh.position, scale: mesh.scale});
+			}
+			});
 
 		$('#clearBlocksButton').click(function(){
 			if(confirm("Are you sure you want to delete all the blocks?"))
