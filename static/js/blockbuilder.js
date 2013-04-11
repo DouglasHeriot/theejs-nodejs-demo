@@ -51,7 +51,7 @@ function init()
 	hemiLight.position.set(-200, 500, 200);
 	scene.add(hemiLight);
 
-	renderer = new THREE.WebGLRenderer();
+	renderer = Detector.webgl? new THREE.WebGLRenderer(): new THREE.CanvasRenderer();
 	renderer.setSize(window.innerWidth, window.innerHeight);
 
 	controls = new THREE.TrackballControls(camera, renderer.domElement);
