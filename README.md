@@ -19,5 +19,5 @@ To run:
 
 	git push origin master
 
-The post-receive hook should automatically checkout the latest version and restar the server process.
+The post-receive hook should automatically checkout the latest version and restart the server process.
 
