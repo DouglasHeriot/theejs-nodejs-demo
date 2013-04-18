@@ -14,5 +14,10 @@ To run:
 
     http://localhost:9001/
 
-(May also be running at http://threejs.321.douglasheriot.com/ )
+
+## Deploy
+
+	git push origin master
+
+The post-receive hook should automatically checkout the latest version and restar the server process.
 
