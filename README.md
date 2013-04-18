@@ -1,5 +1,7 @@
 # Three.js Demo
 
+## Getting Started
+
 To run:
 
 1. Install Node.js
