@@ -6,15 +6,11 @@ To run:
 
     http://nodejs.org/
 
-2. Install required packages
-
-    $ npm install express socket.io
-
-3. Run
+2. Run
 
     $ node server.js
 
-4. Open in a modern web broswer
+3. Open in a modern web broswer
 
     http://localhost:9001/
 

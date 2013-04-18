@@ -1,0 +1,10 @@
+{
+	"name": "threejs-test",
+	"description": "playing with threejs",
+	"version": "1.0.0",
+	"private": true,
+	"dependencies": {
+		"express": "3.2",
+		"socket.io": "0.9"
+	}
+}
