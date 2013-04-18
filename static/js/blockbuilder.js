@@ -6,6 +6,7 @@ var controls;
 var socket;
 var cursors = {};
 var blocks = [];
+var username = "";
 
 function newBlock(position, scale, wireframe, color)
 {
@@ -97,17 +98,9 @@ function init()
 		clearBlocks();
 		});
 			
-			
-	//New section for chatWindow
-	socket.on('connect', function(){
-		socket.emit('newUser', prompt("Please enter the name that you would like to identify you in the chat window"));
-	});
-	
 	socket.on('updateChat', function(username, message){
 		$('#chatWindow').append(username+":>" + " " + message +"\n");
 	});
-	//End new section for chatWindow
-			
 }
 
 function animate()
@@ -177,6 +170,14 @@ $(function(){
 
 		//New section for chatWindow
 		
+		$('#message').focus(function(){
+			// Prompt for username if it hasn't been set yet
+			if(username == "")
+				socket.emit('newUser', username = prompt("Please enter the name that you would like to identify you in the chat window"));
+
+			return true;
+		});
+
 		//When the user clicks the send button
 		$('#send').click(function(){
 		
