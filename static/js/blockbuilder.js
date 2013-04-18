@@ -51,7 +51,7 @@ function init()
 	hemiLight.position.set(-200, 500, 200);
 	scene.add(hemiLight);
 
-	renderer = new THREE.WebGLRenderer();
+	renderer = Detector.webgl? new THREE.WebGLRenderer(): new THREE.CanvasRenderer();
 	renderer.setSize(window.innerWidth, window.innerHeight);
 
 	controls = new THREE.TrackballControls(camera, renderer.domElement);
@@ -61,35 +61,22 @@ function init()
 	socket.on('move', function(data){
 			if(cursors[data.id] == undefined)
 			{
-				cursors[data.id] = newBlock(data.position, data.scale, true, data.color);
+				cursors[data.id] = newBlock(data.position, data.scale, true);
 				scene.add(cursors[data.id]);
 			}
 			cursors[data.id].position = data.position;
-			cursors[data.id].scale = mesh.scale; 
-			cursors[data.id].color = data.color;              
+			cursors[data.id].scale = mesh.scale;              
             });
     
     socket.on('blockSize', function(data){
         if(cursors[data.id] == undefined)
         {
-            cursors[data.id] = newBlock(data.position, data.scale, true, data.color);
+            cursors[data.id] = newBlock(data.position, data.scale, true);
             scene.add(cursors[data.id]);
         }
         cursors[data.id].position = data.position;
         cursors[data.id].scale = data.scale;
-        cursors[data.id].color = data.color;
         });
-       
-    socket.on('blockColor', function(data){
-		if(cursors[data.id] == undefined)
-		{
-			cursors[data.id] = newBlock(data.position, data.scale, true, data.color);
-			scene.add(cursors[data.id]);
-		}
-		cursors[data.id].position = data.position;
-		cursors[data.id].scale = data.scale;
-		cursors[data.id].color = data.color;
-		});
 
 	socket.on('place', function(data){
 		var block = newBlock(data.position, data.scale, false, data.color); 
@@ -134,31 +121,24 @@ function animate()
 $(function(){
 		$('#sliderX').change(function(){
 			mesh.position.x = this.valueAsNumber;
-			socket.emit('move', {position: mesh.position, scale: mesh.scale, color: mesh.color});
+			socket.emit('move', {position: mesh.position, scale: mesh.scale});
 			});
 		$('#sliderY').change(function(){
 			mesh.position.y = this.valueAsNumber;
-			socket.emit('move', {position: mesh.position, scale: mesh.scale, color: mesh.color});
+			socket.emit('move', {position: mesh.position, scale: mesh.scale});
 			});
 		$('#sliderZ').change(function(){
 			mesh.position.z = this.valueAsNumber;
-			socket.emit('move', {position: mesh.position, scale: mesh.scale, color: mesh.color});
+			socket.emit('move', {position: mesh.position, scale: mesh.scale});
 			});
 		$('#sliderSize').change(function(){
             mesh.scale.x = this.valueAsNumber;
             mesh.scale.y = this.valueAsNumber;
             mesh.scale.z = this.valueAsNumber;
-            socket.emit('blockSize', {position: mesh.position, scale: mesh.scale, color: mesh.color});
-			});
-		$('#colorPicker').change(function(){
-			mesh.color = this.value;
-			socket.emit('blockColor', {position: mesh.position, scale: mesh.scale, color: mesh.color});
+            socket.emit('blockSize', {position: mesh.position, scale: mesh.scale});
 			});
 		$('#placeBlockButton').click(function(){
-			if(mesh.color == undefined)
-			{
-				mesh.color = 0xffffff;
-			}
+			mesh.color = $('#colorPicker').val();
 			var block = newBlock(mesh.position, mesh.scale, false, mesh.color); 
 			blocks.push(block);
 			scene.add(block);
@@ -178,8 +158,7 @@ $(function(){
 				blocks.push(block);
 				scene.add(block);
 				socket.emit('place', {position: mesh.position, scale: mesh.scale, color: mesh.color});
-			}
-			mesh.color = ('colorPicker').value;		
+			}	
 			});
 
 		$('#clearBlocksButton').click(function(){
