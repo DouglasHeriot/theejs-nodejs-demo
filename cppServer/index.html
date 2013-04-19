@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	
+	<script type="text/javascript" src="js/three.min.js"></script>
+	<script type="text/javascript" src="js/TrackballControls.js"></script>
+	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript">
+	document.write('<script type="text/javascript" src="' + location.protocol + '//' + location.hostname + ':8080/socket.io/socket.io.js"><' + '/script>');
+	</script>
+	<script type="text/javascript" src="js/blockbuilder.js"></script>
+
+	<link rel="stylesheet" href="css/styles.css" media="all">
+	
+	<title>BlockBuilder Three.js, NodeJS, and Socket.io demo</title>
+</head>
+<body>
+		
+	<div id="controls">
+		<input type="range" min="-1000" max="1000" id="sliderX">
+		<input type="range" min="-1000" max="1000" id="sliderY">
+		<input type="range" min="-1000" max="1000" id="sliderZ">
+		<input type="range" min="1" max="4" step="0.01" id="sliderSize">
+        <select id="colorPicker">
+            <option value="0xff0000">Color1</option>
+            <option value="0xff00ff">Color2</option>
+            <option value="0xff00dd">Color3</option>
+            <option value="0xffdd00">Color4</option>
+            <option value="0xff0033">Color5</option> 
+        </select>
+		<input type="color" value="#ffffff" id="colorPicker">
+        <input type="button" id="placeBlockButton" value="Place Block">
+		<input type="button" id="clearBlocksButton" value="Delete All Blocks">
+		<input type="button" id="lotsOfBlocks" value="Lots of Blocks">
+	</div>
+	<div id="chatArea">
+		<textarea disabled rows="10" cols="39" id="chatWindow"></textarea>
+		<input type="text" id="message" size="50"/>
+		<input type="button" id="send" value="send"/>
+	</div>
+</body>
+</html>
+
