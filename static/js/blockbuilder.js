@@ -46,13 +46,25 @@ function init()
     
 	scene.add(mesh);
 
-	hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1.0);
-	hemiLight.color.setHSL(1.0, 1.0, 1.0);
-	hemiLight.groundColor.setHSL(0.0, 0.0, 0.75);
-	hemiLight.position.set(-200, 500, 200);
-	scene.add(hemiLight);
+	if(Detector.webgl)
+	{
+		hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1.0);
+		hemiLight.color.setHSL(1.0, 1.0, 1.0);
+		hemiLight.groundColor.setHSL(0.0, 0.0, 0.75);
+		hemiLight.position.set(-200, 500, 200);
+		scene.add(hemiLight);
 
-	renderer = Detector.webgl? new THREE.WebGLRenderer(): new THREE.CanvasRenderer();
+		renderer = new THREE.WebGLRenderer();
+	}
+	else
+	{
+		hemiLight = new THREE.AmbientLight(0xffffff, 0xffffff, 1.0);
+		hemiLight.color.setHSL(1.0, 1.0, 1.0);
+		scene.add(hemiLight);
+
+		renderer = new THREE.CanvasRenderer();
+	}
+
 	renderer.setSize(window.innerWidth, window.innerHeight);
 
 	controls = new THREE.TrackballControls(camera, renderer.domElement);
