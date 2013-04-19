@@ -140,17 +140,29 @@ $(function(){
 		$('#lotsOfBlocks').click(function(){
 			for(var i = 0; i < 100; i++)
 			{
+				var r = new Array();
+				r[0] = Math.random();
+				r[1] = Math.random();
+				r[2] = Math.random();
+
 				var max = 1000;
-				mesh.position.x = Math.random() * max*2 - max/2;
-				mesh.position.y = Math.random() * max*2 - max/2;
-				mesh.position.z = Math.random() * max*2 - max/2;
+				mesh.position.x = r[0] * max*2 - max/2;
+				mesh.position.y = r[1] * max*2 - max/2;
+				mesh.position.z = r[2] * max*2 - max/2;
 				mesh.position.scale = Math.random() * 2;
-				mesh.color = parseInt(Math.random() * 0xffffff);
+
+				var color = new THREE.Color();
+				color.r = r[0];
+				color.g = r[1];
+				color.b = r[2];
+
+				mesh.color = color;
+
 
 				var block = newBlock(mesh.position, mesh.scale, false, mesh.color); 
 				blocks.push(block);
 				scene.add(block);
-				socket.emit('place', {position: mesh.position, scale: mesh.scale, color: mesh.color});
+				socket.emit('place', {position: mesh.position, scale: mesh.scale, color: mesh.color.getHex()});
 			}	
 			});
 
